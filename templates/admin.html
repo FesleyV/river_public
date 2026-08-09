@@ -1,0 +1,82 @@
+{{define "admin.html"}}
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Добавление воспоминания в Реку воспоминаний.">
+    <title>Добавить воспоминание — Река воспоминаний</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="admin-page">
+    <header class="topbar">
+        <a class="brand" href="/">❤Река наших совместных воспоминаний❤</a>
+        <a class="admin-link" href="/">Вернуться к реке</a>
+    </header>
+
+    <main class="admin-shell">
+        <section class="admin-card">
+            <div class="admin-heading">
+                <p class="eyebrow">Новый момент</p>
+                <h1>Добавить наше воспоминание ❤</h1>
+                <p>Заполни три поля — фотография и запись будут сохранены автоматически.</p>
+            </div>
+
+            {{if .Error}}
+            <div class="form-error" role="alert">{{.Error}}</div>
+            {{end}}
+
+            <form class="memory-form" method="post" action="/admin" enctype="multipart/form-data">
+                <label class="field">
+                    <span>Название</span>
+                    <input type="text" name="title" maxlength="120" placeholder="Например, Летний вечер у моря" required>
+                </label>
+
+                <label class="field">
+                    <span>Дата</span>
+                    <input type="date" name="date" required>
+                </label>
+
+                <label class="field">
+                    <span>Фотография</span>
+                    <input id="photoInput" type="file" name="photo" accept="image/jpeg,image/png,image/gif,image/webp" required>
+                    <small>JPG, PNG, GIF или WEBP, до 10 МБ.</small>
+                </label>
+
+                <div class="preview" id="preview" hidden>
+                    <img id="previewImage" src="" alt="Предпросмотр выбранной фотографии">
+                    <div>
+                        <span>Предпросмотр</span>
+                        <strong id="previewName"></strong>
+                    </div>
+                </div>
+
+                <button class="primary-button submit-button" type="submit">Отправить в плавание 🥰</button>
+            </form>
+        </section>
+
+        {{if .Memories}}
+        <section class="admin-list">
+            <div class="admin-list-heading">
+                <h2>Уже в реке 😍</h2>
+                <span>{{len .Memories}}</span>
+            </div>
+            <div class="memory-list">
+                {{range .Memories}}
+                <div class="memory-list-item">
+                    <img src="{{.PhotoPath}}" alt="" loading="lazy">
+                    <div>
+                        <strong>{{.Title}}</strong>
+                        <span>{{.Date}}</span>
+                    </div>
+                </div>
+                {{end}}
+            </div>
+        </section>
+        {{end}}
+    </main>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
+{{end}}
